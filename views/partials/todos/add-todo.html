@@ -1,0 +1,11 @@
+<form
+  hx-post="/todos"
+  hx-target="#todos"
+  hx-swap="beforeend"
+  hx-indicator="#spinner"
+  hx-on::after-on-load="document.getElementById('#addTodo').value = ''"
+>
+  <input id="#addTodo" type="text" name="title" value="">
+  <button type="submit">Add</button>
+  </input>
+</form>

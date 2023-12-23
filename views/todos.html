@@ -1,0 +1,8 @@
+<ul id="todos">
+{{range .Todos}}
+  {{template "partials/todos/todo" .}}
+{{end}}
+</ul>
+
+{{template "partials/spinner" .}}
+{{template "partials/todos/add-todo" .}}
