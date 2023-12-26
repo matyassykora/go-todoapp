@@ -12,7 +12,7 @@
 
 .fade-out.htmx-swapping {
   opacity: 0;
-  transition: opacity 0.5s ease-out;
+  transition: opacity 300ms ease-out;
 }
 
 .fade-in.htmx-added {
@@ -21,9 +21,10 @@
 
 .fade-in {
   opacity: 1;
-  transition: opacity 0.5s ease-out;
+  transition: opacity 300ms ease-in;
 }
 
+/* NON-FIREFOX ONLY view transitions */
 @keyframes fade-in {
   from { opacity: 0; }
 }

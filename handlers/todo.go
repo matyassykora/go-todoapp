@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var demoSleepTime = 0 * time.Second
+var demoSleepTime = 2 * time.Second
 
 func HandleTodosGet(c *fiber.Ctx) error {
 	todos, err := db.GetTodos()
@@ -47,6 +47,7 @@ func HandleTodoDelete(c *fiber.Ctx) error {
 }
 
 func HandleTodoEditGet(c *fiber.Ctx) error {
+	time.Sleep(demoSleepTime)
 	id := c.Params("id")
 	todo, err := db.GetTodo(uuid.MustParse(id))
 	if err != nil {
