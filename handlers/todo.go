@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var demoSleepTime = 2 * time.Second
+var demoSleepTime = 0 * time.Second
 
 func HandleTodosGet(c *fiber.Ctx) error {
 	todos, err := db.GetTodos()
@@ -58,7 +58,7 @@ func HandleTodoEditGet(c *fiber.Ctx) error {
 		"ID":    todo.ID,
 		"Title": todo.Title,
 		"Done":  todo.Done,
-	},"")
+	}, "")
 }
 
 func HandleTodoEditPatch(c *fiber.Ctx) error {
@@ -74,7 +74,7 @@ func HandleTodoEditPatch(c *fiber.Ctx) error {
 		"ID":    todo.ID,
 		"Title": todo.Title,
 		"Done":  todo.Done,
-	},"")
+	}, "")
 }
 
 func HandleTodoTogglePatch(c *fiber.Ctx) error {
@@ -89,5 +89,5 @@ func HandleTodoTogglePatch(c *fiber.Ctx) error {
 		"ID":    todo.ID,
 		"Title": todo.Title,
 		"Done":  todo.Done,
-	},"")
+	}, "")
 }

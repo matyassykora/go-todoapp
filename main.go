@@ -29,7 +29,7 @@ func main() {
 	todos := app.Group("/todos")
 	todos.Get("/", handlers.HandleTodosGet)
 	todos.Post("/", handlers.HandleTodosPost)
-	todos.Delete("/delete/:id", handlers.HandleTodoDelete)
+	todos.Delete("/:id", handlers.HandleTodoDelete)
 	todos.Get("/edit/:id", handlers.HandleTodoEditGet)
 	todos.Patch("/update/:id", handlers.HandleTodoEditPatch)
 	todos.Patch("/toggle/:id", handlers.HandleTodoTogglePatch)
