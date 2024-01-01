@@ -13,6 +13,8 @@
   <input
     type="checkbox"
     name="checkbox"
+    id="checkbox-{{.ID}}"
+    autocomplete="off"
     {{if .Done}} checked {{end}}
     hx-patch="/todos/toggle/{{.ID}}"
     hx-target="#todo-{{.ID}}"
