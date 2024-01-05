@@ -1,34 +1,36 @@
-<li id="todo-{{.ID}}" class="fade-in fade-out list-group-item">
-  <span
+<li
+  id="todo-{{.ID}}"
+  hx-target="this"
+  hx-swap="outerHTML swap:300ms"
+  hx-disabled-elt="#disable-{{.ID}}"
+  hx-indicator="#spinner-{{.ID}}"
+  class="gap-2 fade-in fade-out list-group-item col-md-6 offset-md-3 d-flex flex-row"
+>
+  <button
     hx-get="/todos/edit/{{.ID}}"
-    hx-target="#todo-{{.ID}}"
-    hx-swap="outerHTML swap:300ms"
-    hx-indicator="#spinner-{{.ID}}"
-    class="list-group-item-action"
+    class="btn border-0 list-group-item-action"
+    id="disable-{{.ID}}"
   >
-    <span {{if .Done}} style="text-decoration: line-through" {{end}}>
-      ID: {{.ID}}, Title: {{.Title}}, Completed: {{.Done}}
+    <span
+      {{if .Done}} style="text-decoration: line-through;" {{end}}
+    >
+      {{.Title}}
     </span>
-  </span>
+  </button>
+  {{template "partials/spinner-named" .}}
   <input
     type="checkbox"
     name="checkbox"
-    id="checkbox-{{.ID}}"
+    id="disable-{{.ID}}"
     autocomplete="off"
     {{if .Done}} checked {{end}}
     hx-patch="/todos/toggle/{{.ID}}"
-    hx-target="#todo-{{.ID}}"
-    hx-swap="outerHTML swap:300ms"
-    hx-indicator="#spinner-{{.ID}}"
   />
   <button
-    class="fade-out"
+    class="fade-out btn btn-sm btn-outline-danger"
+    id="disable-{{.ID}}"
     hx-delete="/todos/{{.ID}}"
-    hx-target="#todo-{{.ID}}"
-    hx-swap="outerHTML swap:300ms"
-    hx-indicator="#spinner-{{.ID}}"
   >
     Delete
   </button>
-  {{template "partials/spinner-named" .}}
 </li>

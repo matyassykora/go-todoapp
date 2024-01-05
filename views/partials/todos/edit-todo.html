@@ -4,5 +4,5 @@
   hx-indicator="#spinner"
   hx-on::after-settle="moveToInputEnd('edit-todo-{{.ID}}')"
 >
-  <input id="edit-todo-{{.ID}}" type="text" name="title" value="{{.Title}}" />
+  <input class="col-md-6 offset-md-3" id="edit-todo-{{.ID}}" type="text" name="title" value="{{.Title}}" />
 </form>

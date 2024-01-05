@@ -1,8 +1,9 @@
-<ul id="todos" class="list-group list-group-flush">
-{{range .Todos}}
-  {{template "partials/todos/todo" .}}
-{{end}}
-</ul>
+<div class="container">
+  <ul id="todos" class="list-group list-group-flush">
+    {{range .Todos}}
+      {{template "partials/todos/todo" .}}
+    {{end}}
+  </ul>
 
-{{template "partials/spinner" .}}
-{{template "partials/todos/add-todo" .}}
+  {{template "partials/todos/add-todo" .}}
+</div>
