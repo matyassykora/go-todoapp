@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var demoSleepTime = 0 * time.Second
+var demoSleepTime = 1 * time.Second
 
 func HandleTodosGet(c *fiber.Ctx) error {
 	todos, err := db.GetTodos()
