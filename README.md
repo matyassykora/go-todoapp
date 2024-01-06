@@ -21,6 +21,10 @@ By default, the requests are slowed down by one second, this can be changed by s
 ```sh
 go run main.go
 ```
+or
+```sh
+go build && ./todoapp
+```
 
 ### Endpoints
 Endpoints return HTML
