@@ -11,13 +11,27 @@ import (
 var demoSleepTime = 1 * time.Second
 
 func HandleTodosGet(c *fiber.Ctx) error {
-	todos, err := db.GetTodos()
+	filter := c.Query("filter")
+	var todos []db.Todo
+	var err error
+
+	if filter == "done" {
+		todos, err = db.GetTodos(db.DoneTodos)
+	} else if filter == "notdone" {
+		todos, err = db.GetTodos(db.NotDoneTodos)
+	} else {
+		// assuming filter is 'all' or doesn't exist
+		todos, err = db.GetTodos(db.AllTodos)
+		filter = "all"
+	}
+
 	if err != nil {
 		return err
 	}
 
 	return c.Render("todos", fiber.Map{
 		"Todos": todos,
+		"Filter": filter,
 	})
 }
 

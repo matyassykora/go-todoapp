@@ -35,14 +35,32 @@ func getConnection() (*sql.DB, error) {
 	return db, nil
 }
 
-func GetTodos() ([]Todo, error) {
+type Filter int
+
+const (
+	AllTodos Filter = iota
+	DoneTodos
+	NotDoneTodos
+)
+
+func GetTodos(filter Filter) ([]Todo, error) {
 	var todos []Todo
-	db, err := getConnection()
+	var err error
+	var db *sql.DB
+	db, err = getConnection()
 	if err != nil {
 		return nil, err
 	}
 
-	rows, err := db.Query("SELECT id, name, done FROM todos ORDER BY pk")
+	var rows *sql.Rows; 
+	if filter == DoneTodos {
+		rows, err = db.Query("SELECT id, name, done FROM todos WHERE done ORDER BY pk")
+	} else if filter == NotDoneTodos {
+		rows, err = db.Query("SELECT id, name, done FROM todos WHERE NOT done ORDER BY pk")
+	} else {
+		rows, err = db.Query("SELECT id, name, done FROM todos ORDER BY pk")
+	}
+
 	if err != nil {
 		return nil, err
 	}
