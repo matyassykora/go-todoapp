@@ -17,7 +17,7 @@ go install .
 ```
 
 ### Run the server
-By default, the requests are slowed down by one second, this can be changed by setting the *demoSleepTime* variable in *handlers/todo.go*
+(By default, the requests are slowed down by one second, this can be changed by setting the *demoSleepTime* variable in *handlers/todo.go*)
 ```sh
 go run main.go
 ```
@@ -27,17 +27,24 @@ go build && ./todoapp
 ```
 
 ### Endpoints
-Endpoints return HTML
+(Endpoints return HTML)
 
 Return a page with some performance data:
 ```
 GET /metrics
 ```
 
-Get a list of todos:
+Get a list of all todos:
 ```
 GET /
 GET /todos
+```
+
+Get a filtered list of todos:
+```
+GET /todos?filter=all
+GET /todos?filter=done
+GET /todos?filter=notdone
 ```
 
 Add a todo and render it at the end of the list:
