@@ -5,7 +5,12 @@
   hx-indicator="#spinner"
   hx-on::after-on-load="document.getElementById('#addTodo').value = ''"
 >
-  <input class="col-md-6 offset-md-3" id="#addTodo" type="text" name="title" value="">
-  </input>
+  <input
+    class="col-md-6 offset-md-3"
+    id="#addTodo"
+    type="text"
+    name="title"
+    value=""
+  />
   {{template "partials/spinner" .}}
 </form>
