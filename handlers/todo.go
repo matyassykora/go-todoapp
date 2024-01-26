@@ -29,10 +29,32 @@ func HandleTodosGet(c *fiber.Ctx) error {
 		return err
 	}
 
+	var count int
+	count, err = db.GetRemainngCount()
+
+	if err != nil {
+		return err
+	}
+
 	return c.Render("todos", fiber.Map{
-		"Todos": todos,
+		"Todos":  todos,
 		"Filter": filter,
+		"Count":  count,
 	})
+}
+
+func HandleTodosCountGet(c *fiber.Ctx) error {
+	var count int
+	var err error
+	count, err = db.GetRemainngCount()
+
+	if err != nil {
+		return err
+	}
+
+	return c.Render("partials/todos/count", fiber.Map{
+		"Count": count,
+	},"")
 }
 
 func HandleTodosPost(c *fiber.Ctx) error {
@@ -42,6 +64,8 @@ func HandleTodosPost(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+	c.Response().Header.Add("Hx-Trigger", "updateCount")
 
 	return c.Render("partials/todos/todo", fiber.Map{
 		"ID":    todo.ID,
@@ -57,6 +81,9 @@ func HandleTodoDelete(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+	c.Response().Header.Add("Hx-Trigger", "updateCount")
+
 	return nil
 }
 
@@ -98,6 +125,8 @@ func HandleTodoTogglePatch(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+
+	c.Response().Header.Add("Hx-Trigger", "updateCount")
 
 	return c.Render("partials/todos/todo", fiber.Map{
 		"ID":    todo.ID,

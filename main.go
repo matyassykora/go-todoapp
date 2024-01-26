@@ -33,6 +33,7 @@ func main() {
 	todos.Get("/edit/:id", handlers.HandleTodoEditGet)
 	todos.Patch("/update/:id", handlers.HandleTodoEditPatch)
 	todos.Patch("/toggle/:id", handlers.HandleTodoTogglePatch)
+	todos.Get("/count", handlers.HandleTodosCountGet)
 
 	app.Listen(":3000")
 }

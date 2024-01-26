@@ -1,0 +1,66 @@
+<div 
+    class="me-auto"
+    hx-replace-url="true"
+    hx-target="#todos"
+    hx-select="#todos"
+    hx-swap="outerHTML swap:300ms"
+    hx-indicator="#spinner"
+    hx-params="none"
+>
+  <span 
+    class="btn-group"
+    role="group"
+  >
+    <input
+      type="radio"
+      id="toggleAll"
+      name="btnradio" 
+      class="btn-check"
+      hx-get="/todos?filter=all"
+      autocomplete="off"
+      {{if eq .Filter "all"}}
+        checked
+      {{end}}
+    >
+    <label
+      for="toggleAll"
+      class="btn btn-outline-primary"
+    >
+      All
+    </label>
+    <input
+      type="radio"
+      id="toggleDone"
+      name="btnradio" 
+      class="btn-check"
+      hx-get="/todos?filter=done"
+      autocomplete="off"
+      {{if eq .Filter "done"}}
+        checked
+      {{end}}
+    >
+    <label
+      for="toggleDone"
+      class="btn btn-outline-primary"
+    >
+      Done
+    </label>
+    <input
+      type="radio"
+      id="toggleNotDone"
+      name="btnradio" 
+      class="btn-check"
+      hx-get="/todos?filter=notdone"
+      autocomplete="off"
+      {{if eq .Filter "notdone"}}
+        checked
+      {{end}}
+    >
+    <label
+      for="toggleNotDone"
+      class="btn btn-outline-primary"
+    >
+      Not Done
+    </label>
+  </span>
+</div>

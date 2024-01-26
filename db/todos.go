@@ -52,7 +52,7 @@ func GetTodos(filter Filter) ([]Todo, error) {
 		return nil, err
 	}
 
-	var rows *sql.Rows; 
+	var rows *sql.Rows
 	if filter == DoneTodos {
 		rows, err = db.Query("SELECT id, name, done FROM todos WHERE done ORDER BY pk")
 	} else if filter == NotDoneTodos {
@@ -77,6 +77,22 @@ func GetTodos(filter Filter) ([]Todo, error) {
 		return todos, err
 	}
 	return todos, nil
+}
+
+func GetRemainngCount() (int, error) {
+	db, err := getConnection()
+	if err != nil {
+		return -1, err
+	}
+
+	var count int
+	err = db.QueryRow("SELECT count(*) FROM todos WHERE done = false").Scan(&count)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return count, nil
 }
 
 func AddTodo(title string) (Todo, error) {
