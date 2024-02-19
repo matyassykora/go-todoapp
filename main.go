@@ -4,8 +4,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 
-	"todoapp/handlers"
-	"todoapp/middleware"
+	"todoapp/internal/handlers"
+	"todoapp/internal/middleware"
 )
 
 func main() {

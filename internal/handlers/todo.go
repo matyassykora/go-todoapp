@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"time"
-	"todoapp/db"
+	"todoapp/internal/db"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
