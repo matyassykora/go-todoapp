@@ -1,11 +1,13 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
 
 	"database/sql"
+
 	_ "github.com/lib/pq"
 )
 
@@ -95,7 +97,15 @@ func GetRemainngCount() (int, error) {
 	return count, nil
 }
 
+// TODO: make errors visible to the user
 func AddTodo(title string) (Todo, error) {
+	var err error
+	if title == "" {
+		err = errors.New("The todo title cannot be empty!")
+	}
+	if err != nil {
+		return Todo{}, err
+	}
 	db, err := getConnection()
 	if err != nil {
 		return Todo{}, err
