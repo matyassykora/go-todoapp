@@ -4,6 +4,11 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Technologies used
+- [Go](https://go.dev/)
+- [HTMX](https://htmx.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+
 ## Running
 
 ### Create the database
