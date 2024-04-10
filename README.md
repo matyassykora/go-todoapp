@@ -25,6 +25,10 @@ or
 ```sh
 go build && ./todoapp
 ```
+or (if you have [Air](https://github.com/cosmtrek/air) intalled)
+```sh
+air
+```
 
 ### Endpoints
 (Endpoints return HTML)
