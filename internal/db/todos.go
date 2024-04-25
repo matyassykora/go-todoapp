@@ -1,12 +1,15 @@
 package db
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
 
 	"database/sql"
+
+	"todoapp/database/sqlc"
 
 	_ "github.com/lib/pq"
 )
@@ -46,6 +49,7 @@ const (
 )
 
 func GetTodos(filter Filter) ([]Todo, error) {
+	ctx := context.Background()
 	var todos []Todo
 	var err error
 	var db *sql.DB
@@ -54,51 +58,49 @@ func GetTodos(filter Filter) ([]Todo, error) {
 		return nil, err
 	}
 
-	var rows *sql.Rows
+	queries := database.New(db)
+	var rows []database.Todo
+
 	if filter == DoneTodos {
-		rows, err = db.Query("SELECT id, name, done FROM todos WHERE done ORDER BY pk")
+		rows, err = queries.ListDoneTodos(ctx)
 	} else if filter == NotDoneTodos {
-		rows, err = db.Query("SELECT id, name, done FROM todos WHERE NOT done ORDER BY pk")
+		rows, err = queries.ListNotDoneTodos(ctx)
 	} else {
-		rows, err = db.Query("SELECT id, name, done FROM todos ORDER BY pk")
+		rows, err = queries.ListTodos(ctx)
 	}
 
-	if err != nil {
-		return nil, err
+	for _, todo := range rows {
+		todos = append(todos, Todo{
+			ID:    todo.ID,
+			Title: todo.Name,
+			Done:  todo.Done,
+		})
 	}
 
-	for rows.Next() {
-		var todo Todo
-		if err := rows.Scan(&todo.ID, &todo.Title, &todo.Done); err != nil {
-			return todos, err
-		}
-		todos = append(todos, todo)
-	}
-
-	if err := rows.Err(); err != nil {
-		return todos, err
-	}
 	return todos, nil
 }
 
 func GetRemainngCount() (int, error) {
+	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
 		return -1, err
 	}
 
-	var count int
-	err = db.QueryRow("SELECT count(*) FROM todos WHERE done = false").Scan(&count)
+	queries := database.New(db)
+
+	count, err := queries.GetRemainingCount(ctx)
 
 	if err != nil {
 		return -1, err
 	}
 
-	return count, nil
+	return int(count), nil
 }
 
 // TODO: make errors visible to the user
 func AddTodo(title string) (Todo, error) {
+	ctx := context.Background()
 	var err error
 	if title == "" {
 		err = errors.New("The todo title cannot be empty!")
@@ -111,22 +113,40 @@ func AddTodo(title string) (Todo, error) {
 		return Todo{}, err
 	}
 
-	var todo Todo
-	err = db.QueryRow("INSERT INTO todos(id, name, done) VALUES ($1, $2, $3) RETURNING id, name, done", uuid.New(), title, false).Scan(&todo.ID, &todo.Title, &todo.Done)
+	queries := database.New(db)
+
+	var row database.AddTodoRow
+	row, err = queries.AddTodo(ctx, database.AddTodoParams{
+		ID:   uuid.New(),
+		Name: title,
+		Done: false,
+	})
+
 	if err != nil {
 		return Todo{}, err
+	}
+
+	todo := Todo{
+		ID:    row.ID,
+		Title: row.Name,
+		Done:  row.Done,
 	}
 
 	return todo, nil
 }
 
 func DeleteTodo(id uuid.UUID) error {
+	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
 		return err
 	}
+
+	queries := database.New(db)
+
 	var testID uuid.UUID
-	err = db.QueryRow("DELETE FROM todos WHERE id = $1 RETURNING id", id).Scan(&testID)
+	testID, err = queries.DeleteTodo(ctx, id)
+
 	if err != nil {
 		return err
 	}
@@ -139,45 +159,75 @@ func DeleteTodo(id uuid.UUID) error {
 }
 
 func GetTodo(id uuid.UUID) (Todo, error) {
+	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
 		return Todo{}, err
 	}
 
-	var todo Todo
-	err = db.QueryRow("SELECT id, name, done FROM todos WHERE id = $1", id).Scan(&todo.ID, &todo.Title, &todo.Done)
+	queries := database.New(db)
+
+	var dbTodo database.Todo
+	dbTodo, err = queries.GetTodo(ctx, id)
 	if err != nil {
 		return Todo{}, err
+	}
+
+	todo := Todo{
+		ID:    dbTodo.ID,
+		Title: dbTodo.Name,
+		Done:  dbTodo.Done,
 	}
 
 	return todo, nil
 }
 
 func EditTodo(id uuid.UUID, title string) (Todo, error) {
+	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
 		return Todo{}, err
 	}
 
-	var todo Todo
-	err = db.QueryRow("UPDATE todos SET name = $1 WHERE id = $2 RETURNING id, name, done", title, id).Scan(&todo.ID, &todo.Title, &todo.Done)
+	queries := database.New(db)
+
+	var row database.EditTodoRow
+	row, err = queries.EditTodo(ctx, database.EditTodoParams{
+		ID:   id,
+		Name: title,
+	})
+
 	if err != nil {
 		return Todo{}, err
 	}
 
+	todo := Todo{
+		ID:    row.ID,
+		Title: row.Name,
+		Done:  row.Done,
+	}
 	return todo, nil
 }
 
 func ToggleTodo(id uuid.UUID) (Todo, error) {
+	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
 		return Todo{}, err
 	}
 
-	var todo Todo
-	err = db.QueryRow("UPDATE todos SET done = NOT done WHERE id = $1 RETURNING id, name, done", id).Scan(&todo.ID, &todo.Title, &todo.Done)
+	queries := database.New(db)
+
+	var row database.ToggleTodoRow
+	row, err = queries.ToggleTodo(ctx, id)
 	if err != nil {
 		return Todo{}, err
+	}
+
+	todo := Todo{
+		ID:    row.ID,
+		Title: row.Name,
+		Done:  row.Done,
 	}
 
 	return todo, nil
