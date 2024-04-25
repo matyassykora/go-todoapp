@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 
 	"database/sql"
@@ -102,7 +103,6 @@ func GetRemainngCount() (int, error) {
 	return int(count), nil
 }
 
-// TODO: make errors visible to the user
 func AddTodo(title string) (*Todo, error) {
 	ctx := context.Background()
 	var err error
@@ -110,7 +110,7 @@ func AddTodo(title string) (*Todo, error) {
 		err = errors.New("The todo title cannot be empty!")
 	}
 	if err != nil {
-		return nil, err
+		return nil, fiber.NewError(400, err.Error())
 	}
 	db, err := getConnection()
 	if err != nil {
@@ -191,6 +191,13 @@ func EditTodo(id uuid.UUID, title string) (*Todo, error) {
 	db, err := getConnection()
 	if err != nil {
 		return nil, err
+	}
+
+	if title == "" {
+		err = errors.New("The todo title cannot be empty!")
+	}
+	if err != nil {
+		return nil, fiber.NewError(400, err.Error())
 	}
 
 	queries := database.New(db)

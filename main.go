@@ -13,7 +13,6 @@ func main() {
 	app := fiber.New(fiber.Config{
 		Views:        engine,
 		ViewsLayout:  "layouts/base",
-		ErrorHandler: handlers.HandleErrors,
 	})
 
 	app.Use(middleware.Compress)
