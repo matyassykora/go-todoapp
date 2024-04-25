@@ -103,18 +103,18 @@ func GetRemainngCount() (int, error) {
 }
 
 // TODO: make errors visible to the user
-func AddTodo(title string) (Todo, error) {
+func AddTodo(title string) (*Todo, error) {
 	ctx := context.Background()
 	var err error
 	if title == "" {
 		err = errors.New("The todo title cannot be empty!")
 	}
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 	db, err := getConnection()
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
 	queries := database.New(db)
@@ -127,10 +127,10 @@ func AddTodo(title string) (Todo, error) {
 	})
 
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
-	todo := Todo{
+	todo := &Todo{
 		ID:    row.ID,
 		Title: row.Name,
 		Done:  row.Done,
@@ -162,11 +162,11 @@ func DeleteTodo(id uuid.UUID) error {
 	return nil
 }
 
-func GetTodo(id uuid.UUID) (Todo, error) {
+func GetTodo(id uuid.UUID) (*Todo, error) {
 	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
 	queries := database.New(db)
@@ -174,10 +174,10 @@ func GetTodo(id uuid.UUID) (Todo, error) {
 	var dbTodo database.Todo
 	dbTodo, err = queries.GetTodo(ctx, id)
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
-	todo := Todo{
+	todo := &Todo{
 		ID:    dbTodo.ID,
 		Title: dbTodo.Name,
 		Done:  dbTodo.Done,
@@ -186,11 +186,11 @@ func GetTodo(id uuid.UUID) (Todo, error) {
 	return todo, nil
 }
 
-func EditTodo(id uuid.UUID, title string) (Todo, error) {
+func EditTodo(id uuid.UUID, title string) (*Todo, error) {
 	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
 	queries := database.New(db)
@@ -202,10 +202,10 @@ func EditTodo(id uuid.UUID, title string) (Todo, error) {
 	})
 
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
-	todo := Todo{
+	todo := &Todo{
 		ID:    row.ID,
 		Title: row.Name,
 		Done:  row.Done,
@@ -213,11 +213,11 @@ func EditTodo(id uuid.UUID, title string) (Todo, error) {
 	return todo, nil
 }
 
-func ToggleTodo(id uuid.UUID) (Todo, error) {
+func ToggleTodo(id uuid.UUID) (*Todo, error) {
 	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
 	queries := database.New(db)
@@ -225,10 +225,10 @@ func ToggleTodo(id uuid.UUID) (Todo, error) {
 	var row database.ToggleTodoRow
 	row, err = queries.ToggleTodo(ctx, id)
 	if err != nil {
-		return Todo{}, err
+		return nil, err
 	}
 
-	todo := Todo{
+	todo := &Todo{
 		ID:    row.ID,
 		Title: row.Name,
 		Done:  row.Done,
