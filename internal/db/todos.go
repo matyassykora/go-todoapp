@@ -69,6 +69,10 @@ func GetTodos(filter Filter) ([]Todo, error) {
 		rows, err = queries.ListTodos(ctx)
 	}
 
+	if err != nil {
+		return nil, err
+	}
+
 	for _, todo := range rows {
 		todos = append(todos, Todo{
 			ID:    todo.ID,
