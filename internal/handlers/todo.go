@@ -30,7 +30,7 @@ func HandleTodosGet(c *fiber.Ctx) error {
 	}
 
 	var count int
-	count, err = db.GetRemainngCount()
+	count, err = db.GetRemainingCount()
 
 	if err != nil {
 		return err
@@ -46,7 +46,7 @@ func HandleTodosGet(c *fiber.Ctx) error {
 func HandleTodosCountGet(c *fiber.Ctx) error {
 	var count int
 	var err error
-	count, err = db.GetRemainngCount()
+	count, err = db.GetRemainingCount()
 
 	if err != nil {
 		return err
@@ -54,7 +54,7 @@ func HandleTodosCountGet(c *fiber.Ctx) error {
 
 	return c.Render("partials/todos/count", fiber.Map{
 		"Count": count,
-	},"")
+	}, "")
 }
 
 func HandleTodosPost(c *fiber.Ctx) error {
