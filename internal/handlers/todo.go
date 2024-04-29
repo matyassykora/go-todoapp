@@ -76,8 +76,12 @@ func HandleTodosPost(c *fiber.Ctx) error {
 
 func HandleTodoDelete(c *fiber.Ctx) error {
 	time.Sleep(demoSleepTime)
-	id := c.Params("id")
-	err := db.DeleteTodo(uuid.MustParse(id))
+	idParam := c.Params("id")
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		return err
+	}
+	err = db.DeleteTodo(id)
 	if err != nil {
 		return err
 	}
@@ -89,8 +93,14 @@ func HandleTodoDelete(c *fiber.Ctx) error {
 
 func HandleTodoEditGet(c *fiber.Ctx) error {
 	time.Sleep(demoSleepTime)
-	id := c.Params("id")
-	todo, err := db.GetTodo(uuid.MustParse(id))
+
+	idParam := c.Params("id")
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		return err
+	}
+
+	todo, err := db.GetTodo(id)
 	if err != nil {
 		return err
 	}
@@ -104,9 +114,13 @@ func HandleTodoEditGet(c *fiber.Ctx) error {
 
 func HandleTodoEditPatch(c *fiber.Ctx) error {
 	time.Sleep(demoSleepTime)
-	id := c.Params("id")
 	title := c.FormValue("title")
-	todo, err := db.EditTodo(uuid.MustParse(id), title)
+	idParam := c.Params("id")
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		return err
+	}
+	todo, err := db.EditTodo(id, title)
 	if err != nil {
 		return err
 	}
@@ -120,8 +134,13 @@ func HandleTodoEditPatch(c *fiber.Ctx) error {
 
 func HandleTodoTogglePatch(c *fiber.Ctx) error {
 	time.Sleep(demoSleepTime)
-	id := c.Params("id")
-	todo, err := db.ToggleTodo(uuid.MustParse(id))
+	idParam := c.Params("id")
+	id, err := uuid.Parse(idParam)
+	if err != nil {
+		return err
+	}
+
+	todo, err := db.ToggleTodo(id)
 	if err != nil {
 		return err
 	}
