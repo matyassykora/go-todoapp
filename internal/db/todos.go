@@ -41,6 +41,16 @@ const (
 	dbname   = "todo-db"
 )
 
+var conn *sql.DB
+
+func init() {
+	var err error
+	conn, err = getConnection()
+	if err != nil {
+		panic(err)
+	}
+}
+
 func getConnection() (*sql.DB, error) {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
@@ -65,13 +75,8 @@ func GetTodos(filter Filter) ([]Todo, error) {
 	ctx := context.Background()
 	var todos []Todo
 	var err error
-	var db *sql.DB
-	db, err = getConnection()
-	if err != nil {
-		return nil, err
-	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 	var rows []database.Todo
 
 	if filter == DoneTodos {
@@ -100,12 +105,8 @@ func GetTodos(filter Filter) ([]Todo, error) {
 
 func GetRemainingCount() (int, error) {
 	ctx := context.Background()
-	db, err := getConnection()
-	if err != nil {
-		return -1, err
-	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 
 	count, err := queries.GetRemainingCount(ctx)
 
@@ -125,12 +126,8 @@ func AddTodo(title string) (*Todo, error) {
 	if err != nil {
 		return nil, fiber.NewError(400, err.Error())
 	}
-	db, err := getConnection()
-	if err != nil {
-		return nil, err
-	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 
 	var row database.AddTodoRow
 	row, err = queries.AddTodo(ctx, database.AddTodoParams{
@@ -154,15 +151,10 @@ func AddTodo(title string) (*Todo, error) {
 
 func DeleteTodo(id uuid.UUID) error {
 	ctx := context.Background()
-	db, err := getConnection()
-	if err != nil {
-		return err
-	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 
-	var testID uuid.UUID
-	testID, err = queries.DeleteTodo(ctx, id)
+	testID, err := queries.DeleteTodo(ctx, id)
 
 	if err != nil {
 		return err
@@ -177,15 +169,10 @@ func DeleteTodo(id uuid.UUID) error {
 
 func GetTodo(id uuid.UUID) (*Todo, error) {
 	ctx := context.Background()
-	db, err := getConnection()
-	if err != nil {
-		return nil, err
-	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 
-	var dbTodo database.Todo
-	dbTodo, err = queries.GetTodo(ctx, id)
+	dbTodo, err := queries.GetTodo(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -200,11 +187,8 @@ func GetTodo(id uuid.UUID) (*Todo, error) {
 }
 
 func EditTodo(id uuid.UUID, title string) (*Todo, error) {
+	var err error
 	ctx := context.Background()
-	db, err := getConnection()
-	if err != nil {
-		return nil, err
-	}
 
 	if title == "" {
 		err = errors.New("The todo title cannot be empty!")
@@ -213,7 +197,7 @@ func EditTodo(id uuid.UUID, title string) (*Todo, error) {
 		return nil, fiber.NewError(400, err.Error())
 	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 
 	var row database.EditTodoRow
 	row, err = queries.EditTodo(ctx, database.EditTodoParams{
@@ -235,15 +219,10 @@ func EditTodo(id uuid.UUID, title string) (*Todo, error) {
 
 func ToggleTodo(id uuid.UUID) (*Todo, error) {
 	ctx := context.Background()
-	db, err := getConnection()
-	if err != nil {
-		return nil, err
-	}
 
-	queries := database.New(db)
+	queries := database.New(conn)
 
-	var row database.ToggleTodoRow
-	row, err = queries.ToggleTodo(ctx, id)
+	row, err := queries.ToggleTodo(ctx, id)
 	if err != nil {
 		return nil, err
 	}
