@@ -85,7 +85,7 @@ func GetTodos(filter Filter) ([]Todo, error) {
 	return todos, nil
 }
 
-func GetRemainngCount() (int, error) {
+func GetRemainingCount() (int, error) {
 	ctx := context.Background()
 	db, err := getConnection()
 	if err != nil {
