@@ -19,6 +19,18 @@ type Todo struct {
 	ID    uuid.UUID
 	Title string
 	Done  bool
+	Pos   int32
+}
+
+type Todos []Todo
+
+func (todos *Todos) Find(id uuid.UUID) (*Todo, error) {
+	for _, todo := range *todos {
+		if todo.ID == id {
+			return &todo, nil
+		}
+	}
+	return nil, errors.New("Todo " + id.String() + " not found")
 }
 
 const (
@@ -79,6 +91,7 @@ func GetTodos(filter Filter) ([]Todo, error) {
 			ID:    todo.ID,
 			Title: todo.Name,
 			Done:  todo.Done,
+			Pos:   todo.Pos,
 		})
 	}
 
@@ -242,4 +255,20 @@ func ToggleTodo(id uuid.UUID) (*Todo, error) {
 	}
 
 	return todo, nil
+}
+
+func ReorderTodo(todo *Todo) error {
+	ctx := context.Background()
+	queries := database.New(conn)
+
+	err := queries.ReorderTodos(ctx, database.ReorderTodosParams{
+		Pos: todo.Pos,
+		ID:  todo.ID,
+	})
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	return nil
 }

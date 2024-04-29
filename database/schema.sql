@@ -3,5 +3,5 @@ CREATE TABLE public.todos (
     id uuid NOT NULL,
     done boolean NOT NULL,
     pk integer NOT NULL,
-    pos integer
+    pos integer NOT NULL
 );

@@ -98,7 +98,8 @@ const listDoneTodos = `-- name: ListDoneTodos :many
 SELECT name, id, done, pk, pos
 FROM todos 
 WHERE done 
-ORDER BY pk
+ORDER BY pos
+LIMIT 20
 `
 
 func (q *Queries) ListDoneTodos(ctx context.Context) ([]Todo, error) {
@@ -134,7 +135,8 @@ const listNotDoneTodos = `-- name: ListNotDoneTodos :many
 SELECT name, id, done, pk, pos
 FROM todos 
 WHERE NOT done 
-ORDER BY pk
+ORDER BY pos
+LIMIT 20
 `
 
 func (q *Queries) ListNotDoneTodos(ctx context.Context) ([]Todo, error) {
@@ -169,7 +171,8 @@ func (q *Queries) ListNotDoneTodos(ctx context.Context) ([]Todo, error) {
 const listTodos = `-- name: ListTodos :many
 SELECT name, id, done, pk, pos
 FROM todos 
-ORDER BY pk
+ORDER BY pos
+LIMIT 20
 `
 
 func (q *Queries) ListTodos(ctx context.Context) ([]Todo, error) {
@@ -199,6 +202,20 @@ func (q *Queries) ListTodos(ctx context.Context) ([]Todo, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const reorderTodos = `-- name: ReorderTodos :exec
+UPDATE todos SET pos = $1 WHERE id = $2
+`
+
+type ReorderTodosParams struct {
+	Pos int32
+	ID  uuid.UUID
+}
+
+func (q *Queries) ReorderTodos(ctx context.Context, arg ReorderTodosParams) error {
+	_, err := q.db.ExecContext(ctx, reorderTodos, arg.Pos, arg.ID)
+	return err
 }
 
 const toggleTodo = `-- name: ToggleTodo :one

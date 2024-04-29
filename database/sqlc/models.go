@@ -5,8 +5,6 @@
 package database
 
 import (
-	"database/sql"
-
 	"github.com/google/uuid"
 )
 
@@ -15,5 +13,5 @@ type Todo struct {
 	ID   uuid.UUID
 	Done bool
 	Pk   int32
-	Pos  sql.NullInt32
+	Pos  int32
 }

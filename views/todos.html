@@ -1,5 +1,27 @@
 <div class="container-xl py-4 d-flex flex-grow-1 flex-column">
+  <script src=" https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js "></script>
   <script>
+    htmx.onLoad(function (content) {
+      var sortables = content.querySelectorAll('.sortable');
+      for (var i = 0; i < sortables.length; i++) {
+        var sortable = sortables[i];
+        var sortableInstance = new Sortable(sortable, {
+          animation: 150,
+          ghostClass: 'blue-background-class',
+
+          // Disable sorting on the `end` event
+          onEnd: function (evt) {
+            this.option('disabled', true);
+          },
+        });
+
+        // Re-enable sorting on the `htmx:afterSwap` event
+        sortable.addEventListener('htmx:afterSwap', function () {
+          sortableInstance.option('disabled', false);
+        });
+      }
+    });
+
     document.body.addEventListener('htmx:afterRequest', function (evt) {
       const errorTarget = document.getElementById('htmx-alert');
       const closeErrorMessage = () => {
@@ -44,7 +66,15 @@
     id="todos"
     class="fade-in fade-out list-group list-group-flush"
   >
-    {{range .Todos}} {{template "partials/todos/todo" .}} {{end}}
+    <form
+      class="sortable"
+      id="todo-form"
+      hx-post="/todos/reorder"
+      hx-trigger="end"
+      hx-swap="none"
+    >
+      {{range .Todos}} {{template "partials/todos/todo" .}} {{end}}
+    </form>
   </ul>
 
   <div class="d-inline-flex space-evenly col-md-6 offset-md-3 my-2">

@@ -33,6 +33,7 @@ func main() {
 	todos.Patch("/update/:id", handlers.HandleTodoEditPatch)
 	todos.Patch("/toggle/:id", handlers.HandleTodoTogglePatch)
 	todos.Get("/count", handlers.HandleTodosCountGet)
+	todos.Post("/reorder", handlers.HandleTodosReorderPost)
 
 	app.Listen(":3000")
 }
