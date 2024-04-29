@@ -14,7 +14,7 @@
 
 ### Create the database
 ```sh
-psql -U postgres -f todo-db.pgsql
+dropdb -U postgres -f "todo-db"; psql -f todo-db.pgsql -U postgres
 ```
 
 ### Install required packages
