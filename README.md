@@ -6,6 +6,7 @@
 
 ## Technologies used
 - [Go](https://go.dev/)
+- [SQLC](https://sqlc.dev/)
 - [HTMX](https://htmx.org/)
 - [PostgreSQL](https://www.postgresql.org/)
 
