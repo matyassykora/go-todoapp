@@ -2,10 +2,11 @@
   id="todo-{{.ID}}"
   hx-target="this"
   hx-swap="outerHTML swap:300ms"
-  hx-disabled-elt="#disable-{{.ID}}"
+  hx-disabled-elt="#disable-{{.ID}}, input[id^=toggle], #addTodo"
   hx-indicator="#spinner-{{.ID}}"
   class="gap-2 fade-in fade-out list-group-item col-md-6 offset-md-3 d-flex flex-row"
 >
+  <i class="handle"></i>
   <input
     type="hidden"
     name="todo"
