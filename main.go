@@ -5,14 +5,15 @@ import (
 	"github.com/gofiber/template/html/v2"
 
 	"todoapp/internal/handlers"
+	apiHandlers "todoapp/internal/handlers/api"
 	"todoapp/internal/middleware"
 )
 
 func main() {
 	engine := html.New("./views", ".html")
 	app := fiber.New(fiber.Config{
-		Views:        engine,
-		ViewsLayout:  "layouts/base",
+		Views:       engine,
+		ViewsLayout: "layouts/base",
 	})
 
 	app.Use(middleware.Compress)
@@ -33,6 +34,16 @@ func main() {
 	todos.Patch("/toggle/:id", handlers.HandleTodoTogglePatch)
 	todos.Get("/count", handlers.HandleTodosCountGet)
 	todos.Post("/reorder", handlers.HandleTodosReorderPost)
+
+	todoApi := app.Group("/api/todos")
+	todoApi.Get("/", apiHandlers.HandleTodosGet)
+	todoApi.Post("/", apiHandlers.HandleTodosPost)
+	todoApi.Delete("/:id", apiHandlers.HandleTodoDelete)
+	todoApi.Get("/edit/:id", apiHandlers.HandleTodoEditGet)
+	todoApi.Patch("/update/:id", apiHandlers.HandleTodoEditPatch)
+	todoApi.Patch("/toggle/:id", apiHandlers.HandleTodoTogglePatch)
+	todoApi.Get("/count", apiHandlers.HandleTodosCountGet)
+	todoApi.Post("/reorder", apiHandlers.HandleTodosReorderPost)
 
 	app.Listen(":3000")
 }
