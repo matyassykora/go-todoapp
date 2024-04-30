@@ -10,17 +10,25 @@ import (
 
 var demoSleepTime = 1 * time.Second
 
+// TODO: prevent user from reordering when swapping filters
 func HandleTodosGet(c *fiber.Ctx) error {
 	filter := c.Query("filter")
 	var todos db.Todos
 	var err error
 
-	if filter == "done" {
+	if filter != "" {
+		time.Sleep(demoSleepTime)
+	}
+
+	switch filter {
+	case "done":
 		todos, err = db.GetTodos(db.DoneTodos)
-	} else if filter == "notdone" {
+
+	case "notdone":
 		todos, err = db.GetTodos(db.NotDoneTodos)
-	} else {
-		// assuming filter is 'all' or doesn't exist
+
+	// Assuming filter is 'all' or empty
+	default:
 		todos, err = db.GetTodos(db.AllTodos)
 		filter = "all"
 	}
