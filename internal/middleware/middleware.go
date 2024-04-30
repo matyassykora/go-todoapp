@@ -29,8 +29,8 @@ var (
 	Helmet = helmet.New()
 
 	Limiter = limiter.New(limiter.Config{
-		Max:               20,
-		Expiration:        5 * time.Second,
+		Max:               10,
+		Expiration:        1 * time.Second,
 		LimiterMiddleware: limiter.SlidingWindow{},
 	})
 
