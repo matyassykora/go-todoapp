@@ -21,7 +21,6 @@ func main() {
 	app.Use(middleware.Limiter)
 	app.Static("/", "./public")
 
-	// app.Get("/", handlers.HandleIndexGet)
 	app.Get("/", handlers.HandleTodosGet)
 	app.Get("/metrics", middleware.Monitor)
 
