@@ -39,7 +39,7 @@ air
 ### Endpoints
 (Endpoints return HTML)
 
-Return a page with some performance data:
+Return a page with some performance data (credentials: admin/admin):
 ```
 GET /metrics
 ```
@@ -80,4 +80,14 @@ PATCH /todos/update/:id
 Toggle a todo:
 ```
 PATCH /todos/toggle/:id
+```
+
+Get the number of remaining todos:
+```
+GET /todos/count
+```
+
+Reorder todos (expects a form with format todo=UUID):
+```
+POST /todos/reorder
 ```
