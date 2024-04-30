@@ -204,7 +204,7 @@ func HandleTodosReorderPost(c *fiber.Ctx) error {
 	}
 
 	for i := 0; i < len(todos); i++ {
-	err = db.ReorderTodo(&todos[i])
+		err = db.ReorderTodo(&todos[i])
 		if err != nil {
 			return err
 		}
