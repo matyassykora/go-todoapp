@@ -36,9 +36,7 @@ or (if you have [Air](https://github.com/cosmtrek/air) intalled)
 air
 ```
 
-### Endpoints
-(Endpoints return HTML)
-
+### HTML Endpoints
 Return a page with some performance data (credentials: admin/admin):
 ```
 GET /metrics
@@ -90,4 +88,53 @@ GET /todos/count
 Reorder todos (expects a form with format todo=UUID):
 ```
 POST /todos/reorder
+```
+
+### JSON API Endpoints
+Get a list of all todos:
+```
+GET /api
+GET /api/todos
+```
+
+Get a filtered list of todos:
+```
+GET /api/todos?filter=all
+GET /api/todos?filter=done
+GET /api/todos?filter=notdone
+```
+
+Add a todo:
+```
+POST /api/todos
+```
+
+Delete a todo:
+```
+DELETE /api/todos/:id
+```
+
+Get a form to edit a todo:
+```
+GET /api/todos/edit/:id
+```
+
+Update a todo:
+```
+PATCH /api/todos/update/:id
+```
+
+Toggle a todo:
+```
+PATCH /api/todos/toggle/:id
+```
+
+Get the number of remaining todos:
+```
+GET /api/todos/count
+```
+
+Reorder todos:
+```
+POST /api/todos/reorder
 ```

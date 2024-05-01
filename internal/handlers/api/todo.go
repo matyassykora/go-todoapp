@@ -97,25 +97,6 @@ func HandleTodoDelete(c *fiber.Ctx) error {
 	})
 }
 
-func HandleTodoEditGet(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, err := uuid.Parse(idParam)
-	if err != nil {
-		return c.JSON(formattedError(fiber.ErrBadRequest.Code, "Wrong UUID format"))
-	}
-
-	todo, err := db.GetTodo(id)
-	if err != nil {
-		return c.JSON(formattedError(fiber.ErrInternalServerError.Code, "Database error"))
-	}
-
-	return c.JSON(fiber.Map{
-		"ID":    todo.ID,
-		"Title": todo.Title,
-		"Done":  todo.Done,
-	})
-}
-
 func HandleTodoEditPatch(c *fiber.Ctx) error {
 	title := c.FormValue("title")
 	idParam := c.Params("id")

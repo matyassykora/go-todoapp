@@ -40,7 +40,6 @@ func main() {
 	todoApi.Get("/", apiHandlers.HandleTodosGet)
 	todoApi.Post("/", apiHandlers.HandleTodosPost)
 	todoApi.Delete("/:id", apiHandlers.HandleTodoDelete)
-	todoApi.Get("/edit/:id", apiHandlers.HandleTodoEditGet)
 	todoApi.Patch("/update/:id", apiHandlers.HandleTodoEditPatch)
 	todoApi.Patch("/toggle/:id", apiHandlers.HandleTodoTogglePatch)
 	todoApi.Get("/count", apiHandlers.HandleTodosCountGet)
