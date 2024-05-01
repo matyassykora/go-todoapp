@@ -39,7 +39,9 @@ var (
 
 	Logger = logger.New(logger.Config{
 		// For more options, see the Config section
-		Format: "${ip}:${port} ${pid} ${status} ${method} ${path}\n",
+		TimeFormat: time.RFC3339Nano,
+		TimeZone:   "Europe/Czechia",
+		Format:     "[${time}] ${ip}:${port} ${pid} ${status} ${method} ${path}\n",
 	})
 )
 
