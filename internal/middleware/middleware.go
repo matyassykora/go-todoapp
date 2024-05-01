@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 )
 
@@ -35,6 +36,11 @@ var (
 	})
 
 	Monitor = monitor.New(monitor.Config{Title: "Performance Metrics"})
+
+	Logger = logger.New(logger.Config{
+		// For more options, see the Config section
+		Format: "${ip}:${port} ${pid} ${status} ${method} ${path}\n",
+	})
 )
 
 func filterURL(c *fiber.Ctx) bool {
@@ -51,5 +57,3 @@ func filterURL(c *fiber.Ctx) bool {
 	}
 	return true
 }
-
-

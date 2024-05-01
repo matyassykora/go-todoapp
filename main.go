@@ -20,6 +20,7 @@ func main() {
 	app.Use(middleware.Helmet)
 	app.Use(middleware.BasicAuth)
 	app.Use(middleware.Limiter)
+	app.Use(middleware.Logger)
 	app.Static("/", "./public")
 
 	app.Get("/", handlers.HandleTodosGet)
