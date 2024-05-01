@@ -10,7 +10,6 @@ import (
 
 var demoSleepTime = 1 * time.Second
 
-// TODO: prevent user from reordering when swapping filters
 func HandleTodosGet(c *fiber.Ctx) error {
 	filter := c.Query("filter")
 	var todos db.Todos
